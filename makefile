@@ -13,13 +13,16 @@ LDFLAGS = -lm
 $(BIN): $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) $(LDFLAGS) -o $(BIN)
 
-%.0 : %.c Makefile
+%.o: %.c Makefile
 	$(CC) $(CFLAGS) -MMD -MP -MT $@ -MF $*.td -c $<
 	mv -f $*.td $*.d
+
+tags: $(SRCS)
+	ctags -R
 
 -include *.d
 
 .PHONY: clean
 
 clean:
-	rm -f $(BIN) $(OBJS) $(DEPS)
+	rm -f $(BIN) $(OBJS) $(DEPS) tags
