@@ -4,52 +4,12 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include "clock.h"
-
-struct counter {
-    struct clock* sessionClock;
-    struct clock* breakClock;
-    int periods;
-    bool onBreak;
-};
-
-struct counter*
-newCounter(struct clock* sp, struct clock* bp, bool startonbreak){
-    struct counter* cntp = malloc(sizeof(struct counter));
-    cntp->sessionClock = sp;
-    cntp->breakClock = bp;
-    cntp->periods = 1;
-    cntp->onBreak = startonbreak;
-    return cntp;
-}
-
-void
-freeCounter(struct counter* cnt){
-    free(cnt);
-}
-
-void
-printHeader(struct counter* cnt){
-    // TODO: Make clear portable
-    system("clear");
-    struct clock* workedClock = timeWorked(cnt->sessionClock, cnt->periods);
-    printf("%d minute sessions with %d minute breaks.\n"
-            , cnt->sessionClock->totalmin
-            , cnt->breakClock->totalmin);
-    // TODO: Remove code duplication
-    if(cnt->onBreak){
-        printf("Break. Total working time: %s\n"
-                , toString(workedClock));
-    } else {
-        printf("Period #%d. Total working time: %s\n"
-                , cnt->periods
-                , toString(workedClock));
-    }
-    freeClock(workedClock);
-}
+#include "counter.h"
 
 void usage(char* progname){
     fprintf(stderr,"USAGE:\n");
-    fprintf(stderr,"    %s [ -bcmnst ] [ work length] [ break  length]\n",progname);
+    fprintf(stderr,"    %s [ -bcmnst ] [ work length ] [ break  length ]\n",progname);
+    /* TODO: Implement options.
     fprintf(stderr,"OPTIONS:\n");
     fprintf(stderr,"    -b : start on a break\n");
     fprintf(stderr,"    -c : custom command (defaults to \"clear\")\n");
@@ -59,6 +19,7 @@ void usage(char* progname){
     fprintf(stderr,"    -t : show time in tmux status bar\n");
     fprintf(stderr,"    -T : update time in /tmp file\n");
     fprintf(stderr,"    -e : specify time to end at (e.g. 2:45pm today)\n");
+    */
     exit(EXIT_FAILURE);
 }
 
@@ -76,16 +37,100 @@ countdown(struct clock* cl){
     countdown(decClock);
 }
 
+struct argument {
+    char* argument;
+    char* comment;
+    char* value;
+};
 
-int main(int argc, char *argv[])
-{
-    if (argc == 2 || argc > 3) {
-        usage(argv[0]);
-    }
+struct node {
+    struct argument* value;
+    struct node* next;
+};
 
+struct node arguments(){
+    struct argument b = {
+        .argument = "-b",
+        .comment  = "start on a break",
+        .value    = "false"
+    };
+    struct argument m = {
+        .argument = "-m",
+        .comment  = "toggle MPD on change",
+        .value    = "false"
+    };
+    struct argument n = {
+        .argument = "-n",
+        .comment  = "notify on change",
+        .value    = "false"
+    };
+    struct argument s = {
+        .argument = "-s",
+        .comment  = "speak command",
+        .value    = "espeak"
+    };
+    struct argument t = {
+        .argument = "-t",
+        .comment  = "show time in tmux status bar",
+        .value    = "false"
+    };
+    struct argument T = {
+        .argument = "-T",
+        .comment  = "update time in /tmp file",
+        .value    = "false"
+    };
+    struct argument e = {
+        .argument = "-s",
+        .comment  = "specify time to end at (e.g. 2:45pm today)",
+        .value    = ""
+    };
+    struct node enode = {
+        .value = &e,
+        .next = NULL
+    };
+    struct node Tnode = {
+        .value = &T,
+        .next = &enode
+    };
+    struct node tnode = {
+        .value = &t,
+        .next = &Tnode
+    };
+    struct node snode = {
+        .value = &s,
+        .next = &tnode
+    };
+    struct node nnode = {
+        .value = &n,
+        .next = &snode
+    };
+    struct node mnode = {
+        .value = &m,
+        .next  = &nnode
+    };
+    struct node bnode = {
+        .value = &b,
+        .next = &mnode
+    };
+    return bnode;
+}
+
+int main(int argc, char *argv[]) {
     struct clock* session;
     struct clock* sbreak;
+    bool startonbreak = false;
+    char* customCommand = "clear";
+    char* notifyCommand = "notify-send";
+    char* notifyWork = "Get things done.";
+    char* notifyBreak = "Take a break.";
 
+    if (argc > 1) {
+        // int n = 1;
+        // while (argc > 1) {
+        //     printf("registered %s\n", argv[n]);
+        //     n++; argc--;
+        // }
+    }
     /* Parse commandline arguments */
     if (argc == 3) {
         int sessionMin = (int)strtol(argv[1], NULL, 10);
@@ -96,16 +141,18 @@ int main(int argc, char *argv[])
         session = minToClock(sessionMin);
         sbreak = minToClock(sbreakMin);
     } else {
-        session = newClock(0,1,0);
-        sbreak = newClock(0,1,0);
+        // Default work length
+        session = newClock(0,25,0);
+        // Default break length
+        sbreak = newClock(0,5,0);
     }
-    bool startonbreak = false;
+
     /* End parse */
 
     struct counter* cnt = newCounter(session, sbreak, startonbreak);
 
     while (true){
-        printHeader(cnt);
+        printHeader(cnt, customCommand);
         if(cnt->onBreak){
             countdown(&(*cnt->breakClock));
         } else {

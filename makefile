@@ -1,5 +1,5 @@
 BIN = gtd
-SRCS = gtd.c clock.c
+SRCS = gtd.c clock.c counter.c
 
 OBJS = $(SRCS:.c=.o)
 DEPS = $(SRCS:.c=.d)
