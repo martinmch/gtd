@@ -22,7 +22,6 @@ minToClock(int min){
     return newClock(hours, minutes, 0);
 }
 
-
 /* Returns a char pointer. Remember to free */
 char*
 toString(struct clock* cl){

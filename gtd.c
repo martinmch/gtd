@@ -28,6 +28,41 @@ freeCounter(struct counter* cnt){
 }
 
 void
+printHeader(struct counter* cnt){
+    // TODO: Make clear portable
+    system("clear");
+    struct clock* workedClock = timeWorked(cnt->sessionClock, cnt->periods);
+    printf("%d minute sessions with %d minute breaks.\n"
+            , cnt->sessionClock->totalmin
+            , cnt->breakClock->totalmin);
+    // TODO: Remove code duplication
+    if(cnt->onBreak){
+        printf("Break. Total working time: %s\n"
+                , toString(workedClock));
+    } else {
+        printf("Period #%d. Total working time: %s\n"
+                , cnt->periods
+                , toString(workedClock));
+    }
+    freeClock(workedClock);
+}
+
+void usage(char* progname){
+    fprintf(stderr,"USAGE:\n");
+    fprintf(stderr,"    %s [ -bcmnst ] [ work length] [ break  length]\n",progname);
+    fprintf(stderr,"OPTIONS:\n");
+    fprintf(stderr,"    -b : start on a break\n");
+    fprintf(stderr,"    -c : custom command (defaults to \"clear\")\n");
+    fprintf(stderr,"    -m : toggle MPD on change\n");
+    fprintf(stderr,"    -n : notify on change\n");
+    fprintf(stderr,"    -s : speak command\n");
+    fprintf(stderr,"    -t : show time in tmux status bar\n");
+    fprintf(stderr,"    -T : update time in /tmp file\n");
+    fprintf(stderr,"    -e : specify time to end at (e.g. 2:45pm today)\n");
+    exit(EXIT_FAILURE);
+}
+
+void
 countdown(struct clock* cl){
     char* clockString = toString(cl);
     printf("\r%s", clockString);
@@ -36,34 +71,11 @@ countdown(struct clock* cl){
     sleep(1);
     struct clock* decClock = decrementClock(cl);
     if(clockIsAllZeroes(decClock)){
-    // TODO: When session runs out
-    // clear screen.
-    // increment period counter
-    // print break header.
-    //
-    exit(0);
+        return;
     }
     countdown(decClock);
 }
 
-void
-printHeader(struct counter* cnt){
-    int sessionMinutes = cnt->sessionClock->hour*60 + cnt->sessionClock->min;
-    int breakMinutes   = cnt->breakClock->hour*60 + cnt->breakClock->min;
-    struct clock* workedClock = timeWorked(cnt->sessionClock, cnt->periods);
-    printf("%d minute sessions with %d minute breaks.\n"
-            , sessionMinutes
-            , breakMinutes);
-    printf("Period #%d. Total working time: %s\n"
-            , cnt->periods
-            , toString(workedClock));
-    freeClock(workedClock);
-}
-
-void usage(char* progname){
-    fprintf(stderr,"Usage: %s [session time] [break time]\n",progname);
-    exit(EXIT_FAILURE);
-}
 
 int main(int argc, char *argv[])
 {
@@ -84,13 +96,27 @@ int main(int argc, char *argv[])
         session = minToClock(sessionMin);
         sbreak = minToClock(sbreakMin);
     } else {
-        session = newClock(0,25,0);
-        sbreak = newClock(0,5,0);
+        session = newClock(0,1,0);
+        sbreak = newClock(0,1,0);
+    }
+    bool startonbreak = false;
+    /* End parse */
+
+    struct counter* cnt = newCounter(session, sbreak, startonbreak);
+
+    while (true){
+        printHeader(cnt);
+        if(cnt->onBreak){
+            countdown(&(*cnt->breakClock));
+        } else {
+            countdown(&(*cnt->sessionClock));
+            cnt->periods++;
+        }
+        cnt->onBreak = !cnt->onBreak;
+        cnt->sessionClock = session;
+        cnt->breakClock = sbreak;
     }
 
-    struct counter* cnt = newCounter(session, sbreak);
-    printHeader(cnt);
-    countdown(session);
     freeClock(session);
     freeClock(sbreak);
     freeCounter(cnt);
