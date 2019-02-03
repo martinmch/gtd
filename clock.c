@@ -11,6 +11,7 @@ newClock(int hour, int min, int sec){
     cp->hour = hour;
     cp->min = min;
     cp->sec = sec;
+    cp->totalmin = hour*60 + min;
     return cp;
 }
 
@@ -39,7 +40,6 @@ decrementClock(struct clock* cp){
     int hour = (cp->hour);
     int min  = (cp->min);
     int sec  = (cp->sec);
-    free(cp);
     int decSec = sec-1;
     if (decSec < 0) {
         int rollSec = 59;

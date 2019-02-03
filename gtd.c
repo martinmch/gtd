@@ -9,14 +9,16 @@ struct counter {
     struct clock* sessionClock;
     struct clock* breakClock;
     int periods;
+    bool onBreak;
 };
 
 struct counter*
-newCounter(struct clock* sp, struct clock* bp){
+newCounter(struct clock* sp, struct clock* bp, bool startonbreak){
     struct counter* cntp = malloc(sizeof(struct counter));
     cntp->sessionClock = sp;
     cntp->breakClock = bp;
     cntp->periods = 1;
+    cntp->onBreak = startonbreak;
     return cntp;
 }
 
@@ -72,6 +74,7 @@ int main(int argc, char *argv[])
     struct clock* session;
     struct clock* sbreak;
 
+    /* Parse commandline arguments */
     if (argc == 3) {
         int sessionMin = (int)strtol(argv[1], NULL, 10);
         int sbreakMin  = (int)strtol(argv[2], NULL, 10);

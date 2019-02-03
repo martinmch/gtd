@@ -2,6 +2,7 @@ struct clock {
     int hour;
     int min;
     int sec;
+    int totalmin;
 };
 
 struct clock*
