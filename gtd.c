@@ -21,6 +21,11 @@ newCounter(struct clock* sp, struct clock* bp){
 }
 
 void
+freeCounter(struct counter* cnt){
+    free(cnt);
+}
+
+void
 countdown(struct clock* cl){
     char* clockString = toString(cl);
     printf("\r%s", clockString);
@@ -43,12 +48,14 @@ void
 printHeader(struct counter* cnt){
     int sessionMinutes = cnt->sessionClock->hour*60 + cnt->sessionClock->min;
     int breakMinutes   = cnt->breakClock->hour*60 + cnt->breakClock->min;
+    struct clock* workedClock = timeWorked(cnt->sessionClock, cnt->periods);
     printf("%d minute sessions with %d minute breaks.\n"
             , sessionMinutes
             , breakMinutes);
     printf("Period #%d. Total working time: %s\n"
             , cnt->periods
-            , toString(timeWorked(cnt->sessionClock, cnt->periods)));
+            , toString(workedClock));
+    freeClock(workedClock);
 }
 
 void usage(char* progname){
@@ -61,8 +68,10 @@ int main(int argc, char *argv[])
     if (argc == 2 || argc > 3) {
         usage(argv[0]);
     }
+
     struct clock* session;
     struct clock* sbreak;
+
     if (argc == 3) {
         int sessionMin = (int)strtol(argv[1], NULL, 10);
         int sbreakMin  = (int)strtol(argv[2], NULL, 10);
@@ -81,5 +90,6 @@ int main(int argc, char *argv[])
     countdown(session);
     freeClock(session);
     freeClock(sbreak);
+    freeCounter(cnt);
     return 0;
 }

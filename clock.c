@@ -39,6 +39,7 @@ decrementClock(struct clock* cp){
     int hour = (cp->hour);
     int min  = (cp->min);
     int sec  = (cp->sec);
+    free(cp);
     int decSec = sec-1;
     if (decSec < 0) {
         int rollSec = 59;
