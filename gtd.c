@@ -124,13 +124,14 @@ int main(int argc, char *argv[]) {
     char* notifyWork = "Get things done.";
     char* notifyBreak = "Take a break.";
 
+    /*
     if (argc > 1) {
-        // int n = 1;
-        // while (argc > 1) {
-        //     printf("registered %s\n", argv[n]);
-        //     n++; argc--;
-        // }
-    }
+        int n = 1;
+        while (argc > 1) {
+            printf("registered %s\n", argv[n]);
+            n++; argc--;
+        }
+    } */
     /* Parse commandline arguments */
     if (argc == 3) {
         int sessionMin = (int)strtol(argv[1], NULL, 10);
