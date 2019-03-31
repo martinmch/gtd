@@ -84,6 +84,7 @@ countdown(struct clock* cl, bool isBreak){
                 execl(notifyCommand, notifyWorkMsg);
             }
         }
+        free(decClock);
         return;
     }
     countdown(decClock, isBreak);
