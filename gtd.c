@@ -166,8 +166,6 @@ int main(int argc, char *argv[]) {
         cnt->breakClock = sbreak;
     }
 
-    freeClock(session);
-    freeClock(sbreak);
-    freeCounter(cnt);
+    freeCounter(instance);
     return 0;
 }

@@ -22,6 +22,8 @@ newCounter(struct clock* sp, struct clock* bp, bool startonbreak){
 
 void
 freeCounter(struct counter* cnt){
+    freeClock(cnt->sessionClock);
+    freeClock(cnt->breakClock);
     free(cnt);
 }
 
