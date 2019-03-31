@@ -61,7 +61,7 @@ writeToFile(char* fpath, char* timeString){
 }
 
 IO
-countdown(struct clock* cl){
+countdown(struct clock* cl, bool isBreak){
     char* clockString = toString(cl);
     printf("\r%s", clockString);
     fflush(stdout);
@@ -69,9 +69,16 @@ countdown(struct clock* cl){
     sleep(1);
     struct clock* decClock = decrementClock(cl);
     if(clockIsAllZeroes(decClock)){
+        if(notifyOnChange){
+            if(isBreak){
+                execl(notifyCommand, notifyBreakMsg);
+            } else {
+                execl(notifyCommand, notifyWorkMsg);
+            }
+        }
         return;
     }
-    countdown(decClock);
+    countdown(decClock, isBreak);
 }
 
 int main(int argc, char *argv[]) {
@@ -98,13 +105,14 @@ int main(int argc, char *argv[]) {
 
     while (true){
         printHeader(cnt, customCommand);
-        if(cnt->onBreak){
-            countdown(&(*cnt->breakClock));
+        bool isBreak = cnt->onBreak;
+        if(isBreak){
+            countdown(&(*cnt->breakClock), isBreak);
         } else {
-            countdown(&(*cnt->sessionClock));
+            countdown(&(*cnt->sessionClock), isBreak);
             cnt->periods++;
         }
-        cnt->onBreak = !cnt->onBreak;
+        cnt->onBreak = !isBreak;
         cnt->sessionClock = session;
         cnt->breakClock = sbreak;
     }
