@@ -107,9 +107,9 @@ int main(int argc, char *argv[]) {
         printHeader(cnt, customCommand);
         bool isBreak = cnt->onBreak;
         if(isBreak){
-            countdown(&(*cnt->breakClock), isBreak);
+            countdown(cnt->breakClock, isBreak);
         } else {
-            countdown(&(*cnt->sessionClock), isBreak);
+            countdown(cnt->sessionClock, isBreak);
             cnt->periods++;
         }
         cnt->onBreak = !isBreak;
