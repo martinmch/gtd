@@ -48,6 +48,19 @@ usage(char* progname){
 }
 
 IO
+error(char* msg, char* progname){
+    fprintf(stderr,"\033[0;31m%s\033[0m",msg);
+    usage(progname);
+}
+
+IO
+writeToFile(char* fpath, char* timeString){
+    FILE* fp = fopen(fpath, "w");
+    fprintf(fp, timeString);
+    fclose(fp);
+}
+
+IO
 countdown(struct clock* cl){
     char* clockString = toString(cl);
     printf("\r%s", clockString);
