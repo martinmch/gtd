@@ -101,22 +101,22 @@ int main(int argc, char *argv[]) {
         sbreak = newClock(0,5,0);
     }
 
-    struct counter* cnt = newCounter(session, sbreak, startOnBreak);
+    struct counter* instance = newCounter(session, sbreak, startOnBreak);
 
     while (true){
-        printHeader(cnt, customCommand);
-        bool isBreak = cnt->onBreak;
+        printHeader(instance, customCommand);
+        bool isBreak = instance->onBreak;
         if(isBreak){
-            countdown(cnt->breakClock, isBreak);
+            countdown(instance->breakClock, isBreak);
         } else {
-            countdown(cnt->sessionClock, isBreak);
-            cnt->periods++;
+            countdown(instance->sessionClock, isBreak);
+            instance->periods++;
         }
-        cnt->onBreak = !isBreak;
-        cnt->sessionClock = session;
-        cnt->breakClock = sbreak;
+        instance->onBreak = !isBreak;
+        instance->sessionClock = session;
+        instance->breakClock = sbreak;
     }
 
-    freeCounter(cnt);
+    freeCounter(instance);
     return 0;
 }
