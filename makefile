@@ -20,6 +20,20 @@ $(BIN): $(OBJS)
 tags: $(SRCS)
 	ctags -R
 
+dep.dot: $(SRCS)
+	c2dot 2>/dev/null > dep.dot
+	head -n -1 dep.dot > temp.txt ; mv temp.txt dep.dot
+	echo -n "\t" >> dep.dot
+	echo -n *.h | sed 's@\([a-zA-Z]*.h\)@\"\1\";@g; s@^@\{ rank=same; @;' >> dep.dot
+	echo " }"    >> dep.dot
+	echo -n "\t" >> dep.dot
+	echo -n *.c | sed 's@\([a-zA-Z]*.c\)@\"\1\";@g; s@^@\{ rank=same; @;' >> dep.dot
+	echo " }" >> dep.dot
+	echo "}" >> dep.dot
+
+dep.pdf: dep.dot
+	dot -Tpdf dep.dot > dep.pdf
+
 -include *.d
 
 .PHONY: clean
