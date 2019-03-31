@@ -68,6 +68,10 @@ countdown(struct clock* cl, bool isBreak){
     if(writeToTMP){
         writeToFile("/tmp/gtd", clockString);
     }
+    if(updateTMUX){
+        writeToFile("/tmp/gtd-tmux", clockString);
+        execl("tmux","refresh-client -S");
+    }
     free(clockString);
     sleep(1);
     struct clock* decClock = decrementClock(cl);
