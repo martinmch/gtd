@@ -7,6 +7,28 @@
 #include "counter.h"
 #include "IO.h"
 
+// Commands
+char* customCommand  = "clear";
+char* notifyCommand  = "notify-send";
+char* speakCommand   = "&>/dev/null espeak";
+char* MPDCommand     = "mpc -q toggle";
+char* exename;
+
+// Default settings
+int defBreakLength   = 5;
+int defSessionLength = 25;
+char* notifyWorkMsg  = "Get things done.";
+char* notifyBreakMsg = "Take a break.";
+char* speakWorkMsg   = "Get things done.";
+char* speakBreakMsg  = "Take a break.";
+
+// Flags
+bool notifyOnChange = false;
+bool toggleMPDonChange = false;
+bool startOnBreak = false;
+bool writeToTMP = false;
+bool updateTMUX = false;
+
 void usage(char* progname){
     fprintf(stderr,"USAGE:\n");
     fprintf(stderr,"    %s [ -bcmnst ] [ work length ] [ break  length ]\n",progname);
@@ -41,18 +63,13 @@ countdown(struct clock* cl){
 int main(int argc, char *argv[]) {
     struct clock* session;
     struct clock* sbreak;
-    bool startonbreak = false;
-    char* customCommand = "clear";
-    char* notifyCommand = "notify-send";
-    char* notifyWork = "Get things done.";
-    char* notifyBreak = "Take a break.";
+    exename = argv[0];
 
-    /* Parse commandline arguments */
     if (argc == 3) {
         int sessionMin = (int)strtol(argv[1], NULL, 10);
         int sbreakMin  = (int)strtol(argv[2], NULL, 10);
         if (!(sessionMin > 0 && sbreakMin > 0)) {
-            usage(argv[0]);
+            usage(exename);
         }
         session = minToClock(sessionMin);
         sbreak = minToClock(sbreakMin);
@@ -63,7 +80,7 @@ int main(int argc, char *argv[]) {
         sbreak = newClock(0,5,0);
     }
 
-    struct counter* cnt = newCounter(session, sbreak, startonbreak);
+    struct counter* cnt = newCounter(session, sbreak, startOnBreak);
 
     while (true){
         printHeader(cnt, customCommand);
@@ -78,6 +95,6 @@ int main(int argc, char *argv[]) {
         cnt->breakClock = sbreak;
     }
 
-    freeCounter(instance);
+    freeCounter(cnt);
     return 0;
 }
