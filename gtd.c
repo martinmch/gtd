@@ -141,19 +141,19 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    if (argc == 3) {
-        int sessionMin = (int)strtol(argv[1], NULL, 10);
-        int sbreakMin  = (int)strtol(argv[2], NULL, 10);
+    if (!(argc-optind)) { // If no arguments supplied
+        session = newClock(0,defSessionLength,0);
+        sbreak = newClock(0,defBreakLength,0);
+    } else if (argc-optind == 2) { // If two arguments are supplied
+        int sessionMin = (int)strtol(argv[optind], NULL, 10);
+        int sbreakMin  = (int)strtol(argv[optind+1], NULL, 10);
         if (!(sessionMin > 0 && sbreakMin > 0)) {
             usage(exename);
         }
         session = minToClock(sessionMin);
         sbreak = minToClock(sbreakMin);
-    } else {
-        // Default work length
-        session = newClock(0,25,0);
-        // Default break length
-        sbreak = newClock(0,5,0);
+    } else { // If more than two arguments are supplied
+        error("Only two arguments are allowed.\n", exename);
     }
 
     struct counter* instance = newCounter(session, sbreak, startOnBreak);
