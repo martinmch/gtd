@@ -29,7 +29,8 @@ bool startOnBreak = false;
 bool writeToTMP = false;
 bool updateTMUX = false;
 
-void usage(char* progname){
+IO
+usage(char* progname){
     fprintf(stderr,"USAGE:\n");
     fprintf(stderr,"    %s [ -bcmnst ] [ work length ] [ break  length ]\n",progname);
     /* TODO: Implement options.
@@ -46,7 +47,7 @@ void usage(char* progname){
     exit(EXIT_FAILURE);
 }
 
-void
+IO
 countdown(struct clock* cl){
     char* clockString = toString(cl);
     printf("\r%s", clockString);
