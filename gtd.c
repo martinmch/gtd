@@ -68,6 +68,7 @@ countdown(struct clock* cl, bool isBreak){
     free(clockString);
     sleep(1);
     struct clock* decClock = decrementClock(cl);
+    free(cl);
     if(clockIsAllZeroes(decClock)){
         if(notifyOnChange){
             if(isBreak){
