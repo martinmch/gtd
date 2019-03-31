@@ -12,7 +12,7 @@ This is a remake of [gtd](https://github.com/connermcd/gtd/) by connermcd.
 - `-n` : notify on change
 - `-s` : speak command
 - `-t` : show time in tmux status bar
-- `-T` : update time in /tmp file **(Extension)**
+- `-T` : update time in /tmp file
 - `-e` : specify time to end at (e.g. 2:45pm today) **(Missing)**
 - `-f` : specify a configuration file **(Missing)**
 
