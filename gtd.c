@@ -140,13 +140,18 @@ int main(int argc, char *argv[]) {
                 abort();
         }
     }
-
-    if (!(argc-optind)) { // If no arguments supplied
+    int argcount = argc-optind;
+    if (!argcount) { // If no arguments supplied
         session = newClock(0,defSessionLength,0);
         sbreak = newClock(0,defBreakLength,0);
-    } else if (argc-optind == 2) { // If two arguments are supplied
+    } else if (argcount < 3) { // If two arguments are supplied
         int sessionMin = (int)strtol(argv[optind], NULL, 10);
-        int sbreakMin  = (int)strtol(argv[optind+1], NULL, 10);
+        int sbreakMin;
+        if (argcount == 2) {
+            sbreakMin = (int)strtol(argv[optind+1], NULL, 10);
+        } else {
+            sbreakMin = sessionMin/5;
+        }
         if (!(sessionMin > 0 && sbreakMin > 0)) {
             usage(exename);
         }
