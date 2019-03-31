@@ -38,84 +38,6 @@ countdown(struct clock* cl){
     countdown(decClock);
 }
 
-struct argument {
-    char* argument;
-    char* comment;
-    char* value;
-};
-
-struct node {
-    struct argument* value;
-    struct node* next;
-};
-
-struct node arguments(){
-    struct argument b = {
-        .argument = "-b",
-        .comment  = "start on a break",
-        .value    = "false"
-    };
-    struct argument m = {
-        .argument = "-m",
-        .comment  = "toggle MPD on change",
-        .value    = "false"
-    };
-    struct argument n = {
-        .argument = "-n",
-        .comment  = "notify on change",
-        .value    = "false"
-    };
-    struct argument s = {
-        .argument = "-s",
-        .comment  = "speak command",
-        .value    = "espeak"
-    };
-    struct argument t = {
-        .argument = "-t",
-        .comment  = "show time in tmux status bar",
-        .value    = "false"
-    };
-    struct argument T = {
-        .argument = "-T",
-        .comment  = "update time in /tmp file",
-        .value    = "false"
-    };
-    struct argument e = {
-        .argument = "-s",
-        .comment  = "specify time to end at (e.g. 2:45pm today)",
-        .value    = ""
-    };
-    struct node enode = {
-        .value = &e,
-        .next = NULL
-    };
-    struct node Tnode = {
-        .value = &T,
-        .next = &enode
-    };
-    struct node tnode = {
-        .value = &t,
-        .next = &Tnode
-    };
-    struct node snode = {
-        .value = &s,
-        .next = &tnode
-    };
-    struct node nnode = {
-        .value = &n,
-        .next = &snode
-    };
-    struct node mnode = {
-        .value = &m,
-        .next  = &nnode
-    };
-    struct node bnode = {
-        .value = &b,
-        .next = &mnode
-    };
-    return bnode;
-}
-
 int main(int argc, char *argv[]) {
     struct clock* session;
     struct clock* sbreak;
@@ -125,14 +47,6 @@ int main(int argc, char *argv[]) {
     char* notifyWork = "Get things done.";
     char* notifyBreak = "Take a break.";
 
-    /*
-    if (argc > 1) {
-        int n = 1;
-        while (argc > 1) {
-            printf("registered %s\n", argv[n]);
-            n++; argc--;
-        }
-    } */
     /* Parse commandline arguments */
     if (argc == 3) {
         int sessionMin = (int)strtol(argv[1], NULL, 10);
@@ -148,8 +62,6 @@ int main(int argc, char *argv[]) {
         // Default break length
         sbreak = newClock(0,5,0);
     }
-
-    /* End parse */
 
     struct counter* cnt = newCounter(session, sbreak, startonbreak);
 
