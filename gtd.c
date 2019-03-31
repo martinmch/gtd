@@ -3,6 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include <unistd.h>
+#include <getopt.h>
 #include "clock.h"
 #include "counter.h"
 #include "IO.h"
@@ -94,6 +95,51 @@ int main(int argc, char *argv[]) {
     struct clock* session;
     struct clock* sbreak;
     exename = argv[0];
+
+    int opt;
+    while((opt = getopt(argc, argv, ":bmnTtec:s:")) != -1)
+    {
+        switch (opt) {
+            case 'b': // start on a break
+                startOnBreak = true;
+                break;
+            case 'm': // toggle MPD on change
+                toggleMPDonChange = true;
+                break;
+            case 'n': // notify on change
+                notifyOnChange = true;
+                break;
+            case 'c': // custom command
+                customCommand = optarg;
+                break;
+            case 's': // speak command
+                speakCommand = optarg;
+                break;
+            case 'T': // update time in /tmp file
+                writeToTMP = true;
+                break;
+            case 't': // show time in tmux status bar
+                updateTMUX = true;
+                break;
+            case 'e': // specify time to end
+                // Check if 'at' is installed
+                // execute `at "END_TIME"<<<"kill $$"`
+            case ':': // If value isn't supplied
+                switch (optopt) {
+                    case 'c':
+                        error("No custom command supplied.\n", exename);
+                    case 's':
+                        error("No speak command supplied.\n", exename);
+                }
+                usage(exename);
+                break;
+            case '?': //
+                error("Invalid flag.\n", exename);
+                break;
+            default:
+                abort();
+        }
+    }
 
     if (argc == 3) {
         int sessionMin = (int)strtol(argv[1], NULL, 10);
