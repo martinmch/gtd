@@ -6,12 +6,6 @@ This is a remake of [gtd](https://github.com/connermcd/gtd/) by connermcd.
 
 ## Flags
 
-Implemented:
-
-None
-
-Missing:
-
 - `-b` : start on a break
 - `-c` : custom command (defaults to "clear")
 - `-m` : toggle MPD on change
@@ -29,7 +23,6 @@ Missing:
 The program loops between two states, work and break. Supplied with two
 arguments, `gtd 25 5`, the program will run with 25 minutes of work seperated
 by 5 minute breaks.
-
 
 ## License
 
