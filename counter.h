@@ -1,3 +1,8 @@
+#ifndef COUNTERH
+#define COUNTERH
+
+#include "IO.h"
+
 struct counter {
     struct clock* sessionClock;
     struct clock* breakClock;
@@ -11,5 +16,6 @@ newCounter(struct clock* sp, struct clock* bp, bool startonbreak);
 void
 freeCounter(struct counter* cnt);
 
-void
+IO
 printHeader(struct counter* cnt, char* customCommand);
+#endif

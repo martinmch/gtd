@@ -1,3 +1,5 @@
+#ifndef CLOCKH
+#define CLOCKH
 struct clock {
     int hour;
     int min;
@@ -25,3 +27,4 @@ minToClock(int min);
 
 bool
 clockIsAllZeroes(struct clock* cl);
+#endif

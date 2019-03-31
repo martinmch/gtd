@@ -5,6 +5,7 @@
 #include <unistd.h>
 #include "clock.h"
 #include "counter.h"
+#include "IO.h"
 
 void usage(char* progname){
     fprintf(stderr,"USAGE:\n");
