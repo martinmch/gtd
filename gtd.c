@@ -31,19 +31,19 @@ bool updateTMUX = false;
 
 IO
 usage(char* progname){
-    fprintf(stderr,"USAGE:\n");
-    fprintf(stderr,"    %s [ -bcmnst ] [ work length ] [ break  length ]\n",progname);
-    /* TODO: Implement options.
-    fprintf(stderr,"OPTIONS:\n");
-    fprintf(stderr,"    -b : start on a break\n");
+    fprintf(stderr,"USAGE:\n\n");
+    fprintf(stderr
+           , "    %s [ -bcmnst ] [ work length ] [ break  length ]\n\n"
+           , progname);
+    fprintf(stderr,"OPTIONS:\n\n");
+    fprintf(stderr,"    -b : start on a break\n"); // startOnBreak
     fprintf(stderr,"    -c : custom command (defaults to \"clear\")\n");
-    fprintf(stderr,"    -m : toggle MPD on change\n");
-    fprintf(stderr,"    -n : notify on change\n");
+    fprintf(stderr,"    -m : toggle MPD on change\n"); // toggleMPDonChange
+    fprintf(stderr,"    -n : notify on change\n"); // notifyOnChange
     fprintf(stderr,"    -s : speak command\n");
-    fprintf(stderr,"    -t : show time in tmux status bar\n");
-    fprintf(stderr,"    -T : update time in /tmp file\n");
+    fprintf(stderr,"    -t : show time in tmux status bar\n"); // updateTMUX
+    fprintf(stderr,"    -T : update time in /tmp file\n"); // writeToTMP
     fprintf(stderr,"    -e : specify time to end at (e.g. 2:45pm today)\n");
-    */
     exit(EXIT_FAILURE);
 }
 
