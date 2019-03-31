@@ -65,6 +65,9 @@ countdown(struct clock* cl, bool isBreak){
     char* clockString = toString(cl);
     printf("\r%s", clockString);
     fflush(stdout);
+    if(writeToTMP){
+        writeToFile("/tmp/gtd", clockString);
+    }
     free(clockString);
     sleep(1);
     struct clock* decClock = decrementClock(cl);
