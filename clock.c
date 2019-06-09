@@ -4,14 +4,40 @@
 #include <stdbool.h>
 #include "clock.h"
 
-struct clock*
-newClock(int hour, int min, int sec){
-    struct clock* cp;
-    cp = (struct clock*)malloc(sizeof(struct clock));
-    cp->hour = hour;
-    cp->min = min;
-    cp->sec = sec;
-    cp->totalmin = hour*60 + min;
+int secToMins(int seconds){
+    return seconds/60;
+}
+int minToSecs(int minutes){
+    return minutes*60;
+}
+int secToHours(int seconds){
+    return seconds/3600;
+}
+int minToHours(int minutes){
+    return minutes/60; 
+}
+int hourToMin(int hours){
+    return hours*60;
+}
+
+struct clock* newClock(int hour, int min, int sec){
+    struct clock* cp = (struct clock*)malloc(sizeof(struct clock));
+    cp->hour = cp->min = cp->sec = cp->totalmin = 0;
+
+    if(hour < 0 || min < 0 || sec < 0){
+        printf("Clock created with negative time unit");
+        exit(1);
+    }
+
+    int sm = secToMins(sec);
+    min += sm;
+    int mh = minToHours(min);
+
+    cp->sec = sec-minToSecs(sm);
+    cp->hour = mh + hour;
+    cp->min += min - hourToMin(mh);
+
+    cp->totalmin = (cp->hour*60) + cp->min;
     return cp;
 }
 
@@ -24,13 +50,13 @@ minToClock(int min){
 
 /* Returns a char pointer. Remember to free */
 char*
-toString(struct clock* cl){
-    char* string = (char*)malloc(9*sizeof(char));
+toString(struct clock* clock){
+    char* string = (char*)malloc(10*sizeof(char));
     sprintf(string
-            , "%02d:%02d:%02d"
-            , cl->hour
-            , cl->min
-            , cl->sec);
+           , "%02d:%02d:%02d"
+           , clock->hour
+           , clock->min
+           , clock->sec);
     return string;
 }
 
@@ -57,23 +83,9 @@ decrementClock(struct clock* cp){
 }
 
 
-bool
-clockIsAllZeroes(struct clock* cl){
-    if(cl->hour == 0 && cl->min == 0 && cl->sec == 0){
-        return true;
-    }
-    return false;
-}
-
-struct clock*
-timeWorked(struct clock* sessionClock, int periods){
-    int hoursWorked   = sessionClock->hour * (periods-1);
-    int minutesWorked = sessionClock->min  * (periods-1);
-    int secondsWorked = sessionClock->sec  * (periods-1);
-    return newClock(hoursWorked, minutesWorked, secondsWorked);
+bool clockIsAllZeroes(struct clock* cl){
+    return (cl->hour == 0 && cl->min == 0 && cl->sec == 0);
 }
 
 void
-freeClock(struct clock* cp){
-    free(cp);
-}
+freeClock(struct clock* cp){ free(cp); }
