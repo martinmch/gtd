@@ -22,9 +22,6 @@ decrementClock(struct clock* cp);
 struct clock*
 timeWorked(struct clock* sessionClock, int periods);
 
-struct clock*
-minToClock(int min);
-
 bool
 clockIsAllZeroes(struct clock* cl);
 #endif
