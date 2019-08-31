@@ -17,21 +17,21 @@ char* exename;
 
 // Default settings
 int defBreakLength   = 5;
-int defWorkLength = 25;
+int defWorkLength    = 25;
 char* notifyWorkMsg  = "Get things done.";
 char* notifyBreakMsg = "Take a break.";
 char* speakWorkMsg   = "Get things done.";
 char* speakBreakMsg  = "Take a break.";
-
-// Flags
-bool notifyOnChange = false;
-bool toggleMPDonChange = false;
-bool startOnBreak = false;
-bool writeToTMP = false;
-bool updateTMUX = false;
-
 int workLength;
 int breakLength;
+
+
+// Flags
+bool notifyOnChange    = false;
+bool toggleMPDonChange = false;
+bool startOnBreak      = false;
+bool writeToTMP        = false;
+bool updateTMUX        = false;
 
 struct clock* resetClock(bool breakClock){
     return breakClock
