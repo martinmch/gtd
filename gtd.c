@@ -113,7 +113,7 @@ printHeader(int periods, bool onBreak){
     freeClock(workedClock);
 
     if (onBreak) {
-        printf("Break. Total working time: %s. %i\n", worktime, onBreak);
+        printf("Break. Total working time: %s.\n", worktime);
     } else {
         printf("Period #%d. Total working time: %s\n", periods,
                 worktime);
