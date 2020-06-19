@@ -25,7 +25,6 @@ char* speakBreakMsg  = "Take a break.";
 int workLength;
 int breakLength;
 
-
 // Flags
 bool notifyOnChange    = false;
 bool toggleMPDonChange = false;
