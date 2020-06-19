@@ -101,7 +101,7 @@ countdown(struct clock* clock){
 
 
 IO
-printHeader(int periods, bool onBreak){
+printHeader(int periods, int breaks, bool onBreak){
     // global workLength
     // global breakLength
     printf("%d minute sessions with %d minute breaks.\n"
@@ -113,10 +113,9 @@ printHeader(int periods, bool onBreak){
     freeClock(workedClock);
 
     if (onBreak) {
-        printf("Break. Total working time: %s.\n", worktime);
+        printf("Break #%d. Total working time: %s.\n", breaks, worktime);
     } else {
-        printf("Period #%d. Total working time: %s\n", periods,
-                worktime);
+        printf("Period #%d. Total working time: %s\n", periods, worktime);
     }
     free(worktime);
 }
@@ -192,12 +191,13 @@ int main(int argc, char *argv[])
     sbreak = newClock(0,breakLength,0);
 
     int periods = 1;
+    int breaks = 1;
     bool onBreak = startOnBreak;
     bool reset = false;
     struct clock** current;
 
     clearScreen();
-    printHeader(periods, startOnBreak);
+    printHeader(periods, breaks, startOnBreak);
 
     while(true){
         current = onBreak ? &sbreak : &swork;
@@ -212,6 +212,7 @@ int main(int argc, char *argv[])
                 if (notifyOnChange) {
                     execl(notifyCommand, notifyWorkMsg);
                 }
+                breaks++;
             }
             if (toggleMPDonChange) {
                 execl(MPDCommand, MPDArgs);
@@ -231,7 +232,7 @@ int main(int argc, char *argv[])
             freeClock(*current);
             *current = resetClock(onBreak);
             clearScreen();
-            printHeader(periods, onBreak);
+            printHeader(periods, breaks, onBreak);
         }
 
         *current = decrementClock(*current);
