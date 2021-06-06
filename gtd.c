@@ -180,6 +180,12 @@ int main(int argc, char *argv[])
     } else {
         error("Only two arguments are allowed.\n", exename);
     }
+    if (workLength < 1 ) {
+        error("Work period must be longer than one minute.\n", exename);
+    }
+    if (breakLength < 1 ) {
+        error("Break period must be longer than one minute.\n", exename);
+    }
     swork = newClock(0,workLength,0);
     sbreak = newClock(0,breakLength,0);
 
