@@ -4,21 +4,16 @@
 #include <stdbool.h>
 #include "clock.h"
 
-int secToMins(int seconds){
-    return seconds/60;
-}
-int minToSecs(int minutes){
-    return minutes*60;
-}
-int secToHours(int seconds){
-    return seconds/3600;
-}
-int minToHours(int minutes){
-    return minutes/60; 
-}
-int hourToMin(int hours){
-    return hours*60;
-}
+int
+secToMins(int seconds){ return seconds/60; }
+int
+minToSecs(int minutes){ return minutes*60; }
+int
+secToHours(int seconds){ return seconds/3600; }
+int
+minToHours(int minutes){ return minutes/60; }
+int
+hourToMin(int hours){ return hours*60; }
 
 struct clock*
 resetClock(bool breakClock, int breakLength, int workLength){
@@ -27,7 +22,8 @@ resetClock(bool breakClock, int breakLength, int workLength){
         : newClock(0, workLength, 0);
 }
 
-struct clock* newClock(int hour, int min, int sec){
+struct clock*
+newClock(int hour, int min, int sec){
     struct clock* cp = (struct clock*)malloc(sizeof(struct clock));
     cp->hour = cp->min = cp->sec = cp->totalmin = 0;
 
