@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include <getopt.h>
 #include "clock.h"
-#include "IO.h"
 
 // Commands
 char* customCommand  = "clear";
@@ -41,6 +40,8 @@ struct clock* resetClock(bool breakClock){
 #define WORKCLOCK false
 #define BREAKCLOCK true
 
+typedef void IO;
+
 IO
 usage(char* progname){
     fprintf(stderr,"USAGE:\n\n");
@@ -71,7 +72,6 @@ error(char* msg, char* progname){
     fprintf(stderr,"\033[0;31m%s\033[0m",msg);
     usage(progname);
 }
-
 
 IO
 clearScreen(){
