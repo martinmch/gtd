@@ -20,6 +20,13 @@ int hourToMin(int hours){
     return hours*60;
 }
 
+struct clock*
+resetClock(bool breakClock, int breakLength, int workLength){
+    return breakClock
+        ? newClock(0, breakLength, 0)
+        : newClock(0, workLength, 0);
+}
+
 struct clock* newClock(int hour, int min, int sec){
     struct clock* cp = (struct clock*)malloc(sizeof(struct clock));
     cp->hour = cp->min = cp->sec = cp->totalmin = 0;

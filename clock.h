@@ -8,6 +8,9 @@ struct clock {
 };
 
 struct clock*
+resetClock(bool breakClock, int breakLength, int workLength);
+
+struct clock*
 newClock(int hour, int min, int sec);
 
 void

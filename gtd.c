@@ -31,12 +31,6 @@ bool startOnBreak      = false;
 bool writeToTMP        = false;
 bool updateTMUX        = false;
 
-struct clock* resetClock(bool breakClock){
-    return breakClock
-        ? newClock(0,breakLength,0)
-        : newClock(0,workLength,0);
-}
-
 #define WORKCLOCK false
 #define BREAKCLOCK true
 
@@ -229,7 +223,7 @@ int main(int argc, char *argv[])
         if(reset){
             reset = !reset;
             freeClock(*current);
-            *current = resetClock(onBreak);
+            *current = resetClock(onBreak, breakLength, workLength);
             clearScreen();
             printHeader(periods, breaks, onBreak);
         }
