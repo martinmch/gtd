@@ -67,22 +67,22 @@ struct clock*
 decrementClock(struct clock* cp){
     int hour = (cp->hour);
     int min  = (cp->min);
-    int sec  = (cp->sec);
-    int decSec = sec-1;
-    if (decSec < 0) {
-        int rollSec = 59;
-        int decMin = min-1;
-        if (decMin < 0) {
-            int rollMin = 59;
-            int decHour = hour-1;
-            if (decHour < 0) {
-                return newClock(0, 0, 0);
+    int sec  = (cp->sec) - 1;
+    if (sec < 0) {
+        sec = 59;
+        min = min - 1;
+        if (min < 0) {
+            min = 59;
+            hour = hour - 1;
+            if (hour < 0) {
+                hour = 0;
+                min = 0;
+                sec = 0;
             }
-            return newClock(hour, rollMin, rollSec);
         }
-        return newClock(hour, decMin, rollSec);
     }
-    return newClock(hour, min, decSec);
+    freeClock(cp);
+    return newClock(hour, min, sec);
 }
 
 

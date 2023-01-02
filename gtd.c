@@ -234,7 +234,9 @@ int main(int argc, char *argv[])
             printHeader(periods, breaks, onBreak);
         }
 
-        *current = decrementClock(*current);
+        struct clock* decrementedClock = decrementClock(*current);
+        freeClock(*current);
+        *current = decrementedClock;
     }
     freeClock(swork);
     freeClock(sbreak);
