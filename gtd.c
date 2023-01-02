@@ -95,8 +95,6 @@ countdown(struct clock* clock){
 
 IO
 printHeader(int periods, int breaks, bool onBreak){
-    // global workLength
-    // global breakLength
     printf("%d minute sessions with %d minute breaks.\n"
         , workLength , breakLength);
     struct clock* workedClock = newClock(0,workLength*(periods-1),0);
@@ -123,31 +121,29 @@ int main(int argc, char *argv[])
     while((opt = getopt(argc, argv, ":bmnTtec:s:")) != -1)
     {
         switch (opt) {
-            case 'b': // start on a break
+            case 'b':
                 startOnBreak = true;
                 break;
-            case 'm': // toggle MPD on change
+            case 'm':
                 toggleMPDonChange = true;
                 break;
-            case 'n': // notify on change
+            case 'n':
                 notifyOnChange = true;
                 break;
-            case 'c': // custom command
+            case 'c':
                 customCommand = optarg;
                 break;
-            case 's': // speak command
+            case 's':
                 speakCommand = optarg;
                 break;
-            case 'T': // update time in /tmp file
+            case 'T':
                 writeToTMP = true;
                 break;
-            case 't': // show time in tmux status bar
+            case 't':
                 updateTMUX = true;
                 break;
-            case 'e': // specify time to end
-                // Check if 'at' is installed
-                // execute `at "END_TIME"<<<"kill $$"`
-            case ':': // If value isn't supplied
+            case 'e':
+            case ':':
                 switch (optopt) {
                     case 'c':
                         error("No custom command supplied.\n", exename);
@@ -157,7 +153,7 @@ int main(int argc, char *argv[])
                         break;
                 }
                 break;
-            case '?': //
+            case '?':
                 error("Invalid flag.\n", exename);
                 break;
             default:
