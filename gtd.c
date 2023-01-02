@@ -104,9 +104,9 @@ printHeader(int periods, int breaks, bool onBreak){
     freeClock(workedClock);
 
     if (onBreak) {
-        printf("Break #%d. Total working time: %s.\n", breaks, worktime);
+        printf("Break  #%d. Total working time: %s.\n", breaks, worktime);
     } else {
-        printf("Period #%d. Total working time: %s\n", periods, worktime);
+        printf("Period #%d. Total working time: %s.\n", periods, worktime);
     }
     free(worktime);
 }
