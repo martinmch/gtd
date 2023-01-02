@@ -111,7 +111,8 @@ printHeader(int periods, int breaks, bool onBreak){
     free(worktime);
 }
 
-int main(int argc, char *argv[])
+int
+main(int argc, char *argv[])
 {
     struct clock* swork;
     struct clock* sbreak;
